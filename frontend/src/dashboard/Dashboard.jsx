@@ -1,51 +1,41 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
+import AdminDashboard from "./AdminDashboard";
+import UserDashboard from "./UserDashboard";
 
 function Dashboard() {
   const { user, logout } = useContext(AuthContext);
   const [protectedMsg, setProtectedMsg] = useState("");
 
   useEffect(() => {
-    async function fetchProtected() {
+    const fetchProtectedData = async () => {
       const token = localStorage.getItem("token");
 
       try {
         const res = await fetch("http://localhost:5000/api/auth/protected", {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
 
         const data = await res.json();
         if (res.ok) {
           setProtectedMsg(data.message);
         } else {
-          setProtectedMsg(data.message || "Failed to fetch protected data");
+          setProtectedMsg("Unauthorized");
         }
       } catch {
         setProtectedMsg("Server error");
       }
-    }
-    fetchProtected();
+    };
+
+    fetchProtectedData();
   }, []);
 
   return (
     <div>
-      <h1>Dashboard</h1>
-      <p>Welcome, {user.name}!</p>
-      <p>Your role: {user.isAdmin ? "Admin" : "User"}</p>
-
-      {user.isAdmin ? (
-        <div>
-          <h2>Admin Panel</h2>
-          <p>{protectedMsg}</p>
-        </div>
-      ) : (
-        <div>
-          <h2>User Panel</h2>
-          <p>{protectedMsg}</p>
-        </div>
-      )}
-
-      <button onClick={logout}>Logout</button>
+      {user?.isAdmin ? <AdminDashboard logout={logout}/> : <UserDashboard user={user} logout={logout} />}
+      {/* <button onClick={logout}>Logout</button> */}
     </div>
   );
 }
