@@ -2,7 +2,9 @@ import React, { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
+import { URL } from "../../config";
 function Login() {
+
   const [form, setForm] = useState({ email: "", password: "" });
   const [msg, setMsg] = useState("");
   const navigate = useNavigate();
@@ -18,7 +20,7 @@ function Login() {
     setMsg("");
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const res = await fetch(`${URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

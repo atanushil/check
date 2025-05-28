@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import AdminDashboard from "./AdminDashboard";
 import UserDashboard from "./UserDashboard";
-
+import { URL } from "../../config";
 function Dashboard() {
   const { user, logout } = useContext(AuthContext);
   const [protectedMsg, setProtectedMsg] = useState("");
@@ -12,7 +12,7 @@ function Dashboard() {
       const token = localStorage.getItem("token");
 
       try {
-        const res = await fetch("http://localhost:5000/api/auth/protected", {
+        const res = await fetch(`${URL}/api/auth/protected`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
