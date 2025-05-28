@@ -2,7 +2,7 @@ const mongoose=require("mongoose")
 
 const connectDB=async()=>{
     try{
-        await mongoose.connect("mongodb+srv://atanutechstore:atanutech2025@testdb.pjkjmst.mongodb.net/?retryWrites=true&w=majority&appName=testdb")
+        await mongoose.connect(process.env.DB_URL)
         console.log("MongoDB connected successfully.");
     }catch(err){
         connectDBLocally();
