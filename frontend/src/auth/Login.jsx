@@ -1,126 +1,54 @@
-import { useState } from 'react'; // React hook for managing component state
-import { useNavigate } from 'react-router-dom'; // For navigation between pages
-import axios from 'axios'; // HTTP client for API requests
-import { Eye, EyeOff, Mail, Lock } from 'lucide-react'; // Icons for UI
+import React, { useState, useContext } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
-const Login = () => {
-  // State to store form input values
-  const [formData, setFormData] = useState({ email: '', password: '' });
-
-  // State to toggle password visibility
-  const [showPass, setShowPass] = useState(false);
-
-  // State to handle loading status during API call
-  const [isLoading, setIsLoading] = useState(false);
-
-  // Hook to navigate programmatically
+function Login() {
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [msg, setMsg] = useState("");
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
-  // Handle input change and update form data
-  const handleChange = (e) => {
+  const handleChange = e => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setForm(prev => ({ ...prev, [name]: value }));
   };
 
-  // Handle login form submission
-  const handleLogin = async (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
-
-    const { email, password } = formData;
-
-    // Simple form validation
-    if (!email || !password) {
-      alert('Both email and password are required.');
-      return;
-    }
-
-    setIsLoading(true); // Show loading indicator
+  const handleSubmit = async e => {
+    e.preventDefault();
+    setMsg("");
 
     try {
-      // Make POST request to login API with form data
-      const response = await axios.post('http://localhost:3000/api/users/login', formData);
+      const res = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
 
-      // Store user status in localStorage (can be used for conditional rendering or routing)
-      localStorage.setItem('status', response.data.user.status);
+      const data = await res.json();
 
-      alert('Login successful');
-
-      // Redirect user to dashboard
-      navigate('/dashboard');
+      if (res.ok) {
+        login(data.user, data.token);
+        navigate("/");
+      } else {
+        setMsg(data.message || "Login failed");
+      }
     } catch (error) {
-      // Log and display error message from backend
-      console.error('Login error:', error);
-      alert(error.response?.data?.message || 'Login failed.');
-    } finally {
-      setIsLoading(false); // Stop loading
+      setMsg("Server error");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-500 to-indigo-500">
-      <form
-        onSubmit={handleLogin} // Bind form submit to login function
-        className="bg-white shadow-lg rounded-xl px-8 py-10 w-full max-w-md"
-      >
-        <h2 className="text-3xl font-bold mb-6 text-center text-indigo-700">Login</h2>
-
-        {/* Email input field with icon */}
-        <div className="relative mb-4">
-          <Mail className="absolute left-3 top-3.5 text-gray-400" size={18} />
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full pl-10 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-400"
-            required
-          />
-        </div>
-
-        {/* Password input field with visibility toggle */}
-        <div className="relative mb-4">
-          <Lock className="absolute left-3 top-3.5 text-gray-400" size={18} />
-          <input
-            type={showPass ? 'text' : 'password'} // Toggle between text/password
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-full pl-10 pr-10 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-400"
-            required
-          />
-          <button
-            type="button"
-            onClick={() => setShowPass(!showPass)} // Toggle password visibility
-            className="absolute right-3 top-3.5 text-gray-400"
-          >
-            {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
-          </button>
-        </div>
-
-        {/* Submit login button */}
-        <button
-          type="submit"
-          disabled={isLoading} // Disable while loading
-          className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition-all duration-200"
-        >
-          {isLoading ? 'Logging in...' : 'Login'}
-        </button>
-
-        {/* Register redirect text */}
-        <p className="text-sm text-center mt-4 text-gray-600">
-          Don't have an account?{' '}
-          <span
-            className="text-indigo-600 cursor-pointer hover:underline"
-            onClick={() => navigate('/register')} // Navigate to registration page
-          >
-            Register
-          </span>
-        </p>
+    <div>
+      <h2>Login</h2>
+      {msg && <p>{msg}</p>}
+      <form onSubmit={handleSubmit}>
+        <input name="email" placeholder="Email" onChange={handleChange} required />
+        <input name="password" type="password" placeholder="Password" onChange={handleChange} required />
+        <button type="submit">Login</button>
       </form>
+      <p>Don't have account? <Link to="/register">Register</Link></p>
     </div>
   );
-};
+}
 
 export default Login;
