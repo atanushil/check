@@ -1,0 +1,136 @@
+[
+  {
+    "method": "POST",
+    "endpoint": "/api/auth/register",
+    "description": "Register a new user",
+    "response": {
+      "success": true,
+      "message": "User registered successfully",
+      "data": {
+        "id": "uuid",
+        "name": "John Doe",
+        "email": "john@example.com",
+        "isAdmin": false
+      }
+    }
+  },
+  {
+    "method": "POST",
+    "endpoint": "/api/auth/login",
+    "description": "Authenticate user and return token",
+    "response": {
+      "success": true,
+      "message": "Login successful",
+      "token": "JWT_TOKEN_STRING",
+      "user": {
+        "id": "uuid",
+        "email": "john@example.com",
+        "isAdmin": false
+      }
+    }
+  },
+  {
+    "method": "GET",
+    "endpoint": "/api/auth/me",
+    "description": "Get current authenticated user information",
+    "response": {
+      "success": true,
+      "user": {
+        "id": "uuid",
+        "name": "John Doe",
+        "email": "john@example.com",
+        "isAdmin": false
+      }
+    }
+  },
+  {
+    "method": "GET",
+    "endpoint": "/api/user/dashboard",
+    "description": "Fetch dashboard data for user",
+    "response": {
+      "success": true,
+      "dashboard": {
+        "welcomeMessage": "Welcome John!",
+        "recentActivities": [],
+        "stats": {}
+      }
+    }
+  },
+  {
+    "method": "GET",
+    "endpoint": "/api/admin/dashboard",
+    "description": "Fetch dashboard data for admin",
+    "response": {
+      "success": true,
+      "dashboard": {
+        "totalUsers": 100,
+        "activeSessions": 12,
+        "systemHealth": "OK"
+      }
+    }
+  },
+  {
+    "method": "GET",
+    "endpoint": "/api/common/info",
+    "description": "Fetch public or shared information accessible by all users",
+    "response": {
+      "success": true,
+      "info": {
+        "appName": "MyApp",
+        "version": "1.0.0",
+        "maintenance": false
+      }
+    }
+  },
+  {
+    "method": "POST",
+    "endpoint": "/api/feedback",
+    "description": "Submit feedback from user or admin",
+    "response": {
+      "success": true,
+      "message": "Feedback submitted successfully"
+    }
+  },
+  {
+    "method": "PUT",
+    "endpoint": "/api/user/update-profile",
+    "description": "Update user profile data",
+    "response": {
+      "success": true,
+      "message": "Profile updated",
+      "updatedFields": {
+        "name": "New Name",
+        "email": "new@example.com"
+      }
+    }
+  },
+  {
+    "method": "DELETE",
+    "endpoint": "/api/user/delete-account",
+    "description": "Delete the current user account",
+    "response": {
+      "success": true,
+      "message": "Account deleted"
+    }
+  },
+  {
+    "method": "GET",
+    "endpoint": "/api/admin/users",
+    "description": "Get list of all registered users (admin only)",
+    "response": {
+      "success": true,
+      "users": [
+        {
+          "id": "uuid1",
+          "name": "John Doe",
+          "email": "john@example.com"
+        },
+        {
+          "id": "uuid2",
+          "name": "Jane Smith",
+          "email": "jane@example.com"
+        }
+      ]
+    }
+  }
+]

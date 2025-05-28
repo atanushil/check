@@ -1,9 +1,10 @@
 import React from "react";
+import Wrapper from "../components/End-Point/Wrapper";
 
 function UserDashboard({user,logout}) {
   return (
     <div className="min-h-screen bg-gradient-to-r from-green-100 to-blue-100 flex items-center justify-center p-4">
-      <div className="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-2xl text-center">
+      {/* <div className="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-2xl text-center">
         <h2 className="text-3xl font-bold text-blue-700 mb-4">👋 Welcome Back, {user.name}!</h2>
         <p className="text-gray-600 text-lg mb-6">
           This is your personal dashboard. Explore your data, track progress, and interact with your system tools.
@@ -28,7 +29,8 @@ function UserDashboard({user,logout}) {
           </div>
           <button type="button" onClick={logout} className="bg-red-300 p-2 border rounded-2xl cursor-pointer">Logout</button>
         </div>
-      </div>
+      </div> */}
+      <Wrapper/>
     </div>
   );
 }
